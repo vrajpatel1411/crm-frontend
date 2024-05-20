@@ -298,7 +298,7 @@
                         <div id="Productlist" style="display:none;" class="animate-bottom"></div>
                     </div>
                     <div id="emptycontainer" style="display:none;" class="animate-bottom">
-                        <img src="http://localhost:8080/images">
+                        <img src="https://crm-frontend-two-kappa.vercel.app/images">
                         <h3 style="text-align: center;">Nothing here</h3>
                     </div>
                     </div>
@@ -326,7 +326,7 @@
                                 <div id="allfollowup" style="display:none;" class="animate-bottom"></div>
                             </div>
                             <div id="emptycontainer1" style="display:none;" class="animate-bottom">
-                                <img src="http://localhost:8080/images.png">
+                                <img src="https://crm-frontend-two-kappa.vercel.app/images.png">
                                 <h3 style="text-align: center;">Nothing here</h3>
                             </div>
                     </div>
@@ -379,7 +379,7 @@
                         InterestedInStatus:"Interested",
                         InterestedInStatusDate:new Date()
                     } 
-                    axios.post(`http://localhost:3000/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}`,data).then(res=>{
+                    axios.post(`https://web-production-ea1bc.up.railway.app/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}`,data).then(res=>{
                         alert("Product Added");
                         location.reload();
                     })
@@ -391,7 +391,7 @@
                         id: 'product1',
                         name: 'product'
                 }))
-                axios.get(`http://localhost:3000/product/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/client/${ClientID}`).then(res=>{
+                axios.get(`https://web-production-ea1bc.up.railway.app/product/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/client/${ClientID}`).then(res=>{
                     for(var i in res.data.data){
                         $('#product1').append($(document.createElement('option')).prop({
                                 value: res.data.data[i].ProdID,
@@ -413,9 +413,9 @@
                       ContactType:ct,
                       Remarks:remarks
                 }
-                axios.post(`http://localhost:3000/followUp/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}`,data).then(res=>{
+                axios.post(`https://web-production-ea1bc.up.railway.app/followUp/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}`,data).then(res=>{
                     if(res.data.message){
-                        axios.put(`http://localhost:3000/lead/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${LeadId}`,{NextFollowUpDate:nextfdate}).then(response=>{
+                        axios.put(`https://web-production-ea1bc.up.railway.app/lead/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${LeadId}`,{NextFollowUpDate:nextfdate}).then(response=>{
                             if(response.data){
                                 alert("Followup Added");
                                 location.reload();
@@ -434,7 +434,7 @@
             function getallfollowup(){
                 var a=document.getElementById('allfollowup');
                 a.innerHTML="";
-                axios.get(`http://localhost:3000/followup/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${LeadId}`).then(res=>{
+                axios.get(`https://web-production-ea1bc.up.railway.app/followup/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${LeadId}`).then(res=>{
                     let data1=res.data.data;
                     if(res.data.message){
                         data1.map(data => {
@@ -466,9 +466,9 @@
                     ProdID:ProdID,
                     BatchID:value,
                 }
-                axios.put(`http://localhost:3000/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/product/?prodid=${ProdID}&leadid=${LeadId}`,{Status:true}).then(async response=>{
+                axios.put(`https://web-production-ea1bc.up.railway.app/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/product/?prodid=${ProdID}&leadid=${LeadId}`,{Status:true}).then(async response=>{
                 }).catch(err=>{})
-                axios.post(`http://localhost:3000/alumni/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}`,data).then(res=>{
+                axios.post(`https://web-production-ea1bc.up.railway.app/alumni/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}`,data).then(res=>{
                     if(res.data.message)
                     {
                         alert("Client has Enrolled");
@@ -521,9 +521,9 @@
                             else{
                                 e="No Batch Available";
                                 document.getElementById('modal-content-container').innerHTML+=e;
-                                // axios.put(`http://localhost:3000/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/product/?prodid=${prodid}&leadid=${LeadId}`,{Status:true}).then(async response=>{
+                                // axios.put(`https://web-production-ea1bc.up.railway.app/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/product/?prodid=${prodid}&leadid=${LeadId}`,{Status:true}).then(async response=>{
                                 // }).catch(err=>{})
-                                // axios.post(`http://localhost:3000/alumni/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}`,data).then(res=>{
+                                // axios.post(`https://web-production-ea1bc.up.railway.app/alumni/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}`,data).then(res=>{
                                 //     if(res.data.message)
                                 //         {
                                 //             alert("Client has Enrolled");
@@ -562,7 +562,7 @@
             }
             
             function removeproduct(prodid){
-                axios.delete(`http://localhost:3000/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}?ProdID=${prodid}&LeadID=${LeadId}`).then(res=>{
+                axios.delete(`https://web-production-ea1bc.up.railway.app/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}?ProdID=${prodid}&LeadID=${LeadId}`).then(res=>{
                     alert("product Deleted")
                     location.reload();
                 })
@@ -602,7 +602,7 @@
             }
           
             function getConfirmProduct(){
-                axios.get(`http://localhost:3000/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/status/?leadid=${LeadId}&status=true`).then(async response=>{
+                axios.get(`https://web-production-ea1bc.up.railway.app/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/status/?leadid=${LeadId}&status=true`).then(async response=>{
                     var data=response.data.data
                     console.log("Confirm product =>",data)
                     if(response.data.message){
@@ -611,7 +611,7 @@
                         {
                             productid=data[i].ProdID
                             var productName;
-                            await axios.get(`http://localhost:3000/product/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${productid}`).then(response=>{
+                            await axios.get(`https://web-production-ea1bc.up.railway.app/product/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${productid}`).then(response=>{
                                     for(var j in response.data.data){
                                         productName=response.data.data[j].ProdName;
                                     }
@@ -643,7 +643,7 @@
              
 
             function getProduct(){
-                axios.get(`http://localhost:3000/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/status/?leadid=${LeadId}&status=false`).then(async response=>{
+                axios.get(`https://web-production-ea1bc.up.railway.app/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/status/?leadid=${LeadId}&status=false`).then(async response=>{
                 var data=response.data.data;
                 if(response.data.message){
                     var productid;
@@ -655,7 +655,7 @@
                         Intereststatus=data[i].InterestedInStatus;
                         InterestedInStatusDate=data[i].InterestedInStatusDate
                         var productName;
-                        await axios.get(`http://localhost:3000/product/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${productid}`).then(response=>{
+                        await axios.get(`https://web-production-ea1bc.up.railway.app/product/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${productid}`).then(response=>{
                             for(var j in response.data.data){
                                     productName=response.data.data[j].ProdName;
                             }
