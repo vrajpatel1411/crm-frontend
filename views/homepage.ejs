@@ -162,7 +162,7 @@
 
 
                 function addsinglelead(){
-                    axios.get(`https://blissful-dream-production.up.railway.app/lead/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/singlelead/${userid}`).then(response=>{
+                    axios.get(`https://web-production-ea1bc.up.railway.app/lead/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/singlelead/${userid}`).then(response=>{
                        
                         if(response.data.message){
                             alert("Single Lead Added");

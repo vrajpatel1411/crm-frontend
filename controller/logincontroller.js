@@ -10,7 +10,7 @@ const logincontroller = (req, res) => {
   axios
     .post(`${url}/login`, authentication)
     .then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       if (response.data.auth === true) {
         var username = response.data.user;
         var userid = response.data.userid;
