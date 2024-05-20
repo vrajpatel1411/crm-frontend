@@ -2,6 +2,7 @@ var { url } = require("../config");
 const axios = require("axios");
 
 const logincontroller = (req, res) => {
+  console.log("logincontroller");
   const user = req.body.username;
   const pass = req.body.password;
   const authentication = { username: user, password: pass };
