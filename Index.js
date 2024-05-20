@@ -7,7 +7,7 @@ const path = require("path");
 const axios = require("axios");
 const csurf = require("csurf");
 const cookie = require("cookie-parser");
-// const port=process.env.PORT || 5000;
+const port = process.env.PORT || 5000;
 const oneDay = 1000 * 60 * 60 * 24; // this is milisecond of a day.
 const session = require("express-session");
 const readXlsxFile = require("read-excel-file/node");
@@ -592,6 +592,6 @@ app.post("/addBatch", (req, res) => {
     });
 });
 
-app.listen(8080, () => {
+app.listen(port, () => {
   console.log(`your application is live on 8080`);
 });
