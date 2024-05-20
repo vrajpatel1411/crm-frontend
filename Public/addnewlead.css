@@ -1,0 +1,77 @@
+  body{
+    font-family: 'Roboto', sans-serif;
+  }
+  h4{
+    padding:10px 10px 0px 0px;
+    font-size:x-large;
+    margin:1px;
+    }
+    
+    hr{
+        height: 1px;
+        border-radius: 25%;
+        background-color: black;
+    }
+    
+    #newleadmain{
+        margin-left:25px;
+    }
+    #leadnote,input[type=text],input[type=date],input[type=email],input[type=password],select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      
+      input[type=submit]{
+        width: 20%;
+        background-color: 8D8DAA;
+        color: black;
+        padding: 14px 20px;
+        font-weight: bold;
+        margin: 0 auto;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      input[type=submit]:hover {
+        background-color: rgb(160, 160, 190);
+        font-weight: bold;
+      }
+      
+      #submainnewuser,#submainnewlead{
+        border-radius: 5px;
+        margin:0 auto;
+        margin-top: 10px;
+        width: 60%;
+        background-color: #f2f2f2;
+        padding: 20px;
+      }
+      #submainnewlead1{
+        border-radius: 5px;
+        margin:0 auto;
+        margin-top: 10px;
+        width:90%;
+        background-color: #f2f2f2;
+        padding: 20px;
+      }
+      #Bulknewlead{
+        height:800px;
+        width:50%;
+        margin:2%;
+        padding: 20px;
+      }
+      #bulkform{
+        position: absolute;
+        background-color: #f2f2f2;
+        border-radius: 5px;
+        padding:10px;
+        margin-left:2%;
+        margin-top:5%;
+        top: 50%;
+        transform: translate(0, -50%);
+      }

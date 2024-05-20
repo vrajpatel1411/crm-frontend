@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Login </title>
+        <%- include('./Partials/head') %>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>     
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>   
+        <style>
+            body{
+  font-family: 'Roboto', sans-serif;
+}
+            table {
+                border-collapse: collapse;
+                table-layout: fixed;
+                border: 1px solid #ddd;
+                
+            }
+            #leadnote{
+                width:28%
+            }
+            th, td {
+                width:11%;
+                border: 1px solid #ddd;
+                text-align: left;
+                padding: 8px;
+            }
+            th{
+                color:white;
+                background-color: rgb(50,50,50);
+            }
+           .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                padding-top: 100px;
+                padding-bottom: 100px; /* Location of the box */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 80%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            }
+           .modal-content {
+                    background-color: #fefefe;
+                    margin: auto;
+                    padding: 20px;
+                    border: 1px solid #888;
+                    border-radius: 10px;
+                    width: 80%;
+            }
+            tr:nth-child(even) {background: #CCC}
+            .close {
+                    color: #aaaaaa;
+                    float: right;
+                    font-size: 28px;
+                    font-weight: bold;
+            }
+
+            #search-input{
+                margin-top:10px;
+                margin-bottom:10px;
+                padding: 12px 20px;
+                width: 50%;
+                border: 1px solid #000;
+                border-radius:10px;
+                
+            }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            #pagination{
+                margin:10px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+            }
+            .pagebtn{
+                width:5%;
+                margin:2px;
+                padding:2px
+            }
+            
+            .modal-row{
+                display: flex;
+                padding:5px;
+                flex-direction: row;
+            }
+            
+            @media (max-width: 1150px) {
+                .modal-row {
+                    flex-direction: column;
+                }
+                .modal-data{
+                    width: 100%;
+                }
+            }
+            #addLeadbtn:hover{
+                background-color: rgb(118, 118, 202);
+                box-shadow: 2px solid black;
+                color: #000;
+            }
+            .modal-row>div{
+                padding: 5px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <%- include('./Partials/header') %>
+        <div>
+            <input type="text" id="search-input" class="form-control" placeholder="Search By Name">
+          
+                <button class="button-16" id="addLeadbtn" onclick="addsinglelead()" style="float:right;">Add Lead</button>
+           
+            <div style="overflow-x:auto;">
+            <table id="mytable">
+                <tr>
+                    <th data-column="LeadName" data-order="desc" class="clicked-heading">Lead Name &#9650</th>
+                    <th data-column="LeadDate" data-order="desc" class="clicked-heading" id="date-heading">Lead Date &#9650</th>
+                    <th id="leadnote">Lead Note</th>
+                    <th data-column="LeadSource" data-order="desc" class="clicked-heading">Lead Source &#9650</th>
+                    <th >Company Name</th>
+                    <th data-column="NextFollowUpDate" data-order="desc" class="clicked-heading">Followup Date &#9650</th>
+                    <th>See Details</th>
+                    <th>Close Lead</th>
+                </tr>
+                <tbody id="mytablebody">
+
+                </tbody>
+                        
+            </table>
+        </div>            
+        
+        <div>
+            <div id="pagination">
+
+            </div>
+        </div>
+        </div>
+
+        <!-- See details Modal -->
+        <div id="myModal1" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                    <div id="mymodal1-seedetailscontent"></div>
+            </div>
+        </div>
+
+        <script>
+                var userid='<%= userid %>'
+                var token='<%=token%>'
+                var username='<%=user%>'
+                window.localStorage.setItem('token', token);
+                window.localStorage.setItem('username', username);
+
+
+                function addsinglelead(){
+                    axios.get(`https://blissful-dream-production.up.railway.app/lead/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/singlelead/${userid}`).then(response=>{
+                       
+                        if(response.data.message){
+                            alert("Single Lead Added");
+                        }
+                        else{
+                            alert("No more Leads available")
+                        }
+                        location.reload();
+                    })
+                    .catch(err=>{
+                       
+                        alert("Lead Not Added");
+                        location.reload();
+                    })
+                    
+                }
+                
+                // see details to get all details of the lead
+                var res=JSON.parse(`<%-JSON.stringify(response)%>`)
+                var data=[];
+                for (var j in res)
+                {
+                    var a={
+                        LeadName:res[j].LeadName,
+                        LeadDate:res[j].LeadDate,
+                        LeadNote:res[j].LeadNote,
+                        LeadSource:res[j].LeadSource,
+                        LeadStatus:res[j].LeadStatus,
+                        LeadStatusDate:res[j].LeadStatusDate,
+                        NextFollowUpDate:res[j].NextFollowUpDate,
+                        LeadType:res[j].LeadType,
+                        CompanyName:res[j].CompanyName,
+                        LeadID:res[j].LeadID        
+                    }
+                    data.push(a);
+                } // Store all leads data in variable data. 
+               
+                // state
+                var state={
+                    'querySet':data,
+                    'page':1,
+                    'row':10,
+                    'window':5,
+                }   
+                //how many pages will have
+                function pagination(querySet,page,row){
+                    var trimStart=(page-1)*row;
+                    var trimEnd=trimStart+row;
+                    var trimmeddata=querySet.slice(trimStart,trimEnd)
+                    var pages=Math.ceil(querySet.length/row)
+                    return{
+                        'querySet':trimmeddata,
+                        'pages':pages
+                    }
+                }
+                //pagination button
+                function paginationbtn(pages){
+                    var wrapper=document.getElementById("pagination")
+                    wrapper.innerHTML=" "
+                    var maxLeft=(state.page-Math.floor(state.window/2))
+                    var maxRight=(state.page+Math.floor(state.window/2))
+                    if(maxLeft<1)
+                    {
+                        maxLeft=1;
+                        maxRight=state.window;
+
+                    }
+                    if(maxRight>pages)
+                    {
+                        maxLeft=pages-(state.window-1)
+                        maxRight=pages
+                        if(maxLeft<1)
+                        {
+                            maxLeft=1
+                        }
+                    }
+                    for(var page=maxLeft;page<=maxRight;page++)
+                    {
+                        wrapper.innerHTML+=`<button value=${page} class="pagebtn">${page}</button>`
+                    }
+                    if(state.page!=1)
+                    {
+                        wrapper.innerHTML=`<button value=${1} class="pagebtn">&#171; First</button>`+wrapper.innerHTML
+                    }
+                    if(state.page!=pages)
+                    {
+                        wrapper.innerHTML+=`<button value=${pages} class="pagebtn">&#187; Last</button>`
+                    }
+                    $('.pagebtn').on('click',function(){
+                        $('mytablebody').empty()
+                        state.page=Number($(this).val())
+                        showtable()
+                    })
+                }
+                
+
+                showtable()
+                // build table
+                function showtable(){
+                    var d1=pagination(state.querySet,state.page,state.row)
+                    mylist=d1.querySet;
+                    var table=document.getElementById("mytablebody")
+                    table.innerHTML=' '
+                    let len = mylist.length
+                    
+                    for(var i=len-1;i>=0;i--)
+                    {      
+                      
+                         var row=` 
+                                <tr>
+                                    <td>${mylist[i].LeadName ? mylist[i].LeadName : '-'}</td>
+                                    <td>${mylist[i].LeadDate ? mylist[i].LeadDate : '-'}</td>
+                                    <td>${mylist[i].LeadNote ? mylist[i].LeadNote : '-'}</td>
+                                    <td>${mylist[i].LeadSource ? mylist[i].LeadSource : '-'}</td>
+                                    <td>${mylist[i].CompanyName ? mylist[i].CompanyName : '-'}</td>
+                                    <td>${mylist[i].NextFollowUpDate ? mylist[i].NextFollowUpDate==="Invalid date"? '-':mylist[i].NextFollowUpDate : '-'}</td>
+                                    <td><button onClick="location.href='/seedetails/${mylist[i].LeadID}'" id="myBtn" >See Details</button></td>
+                                    <td><button onClick="closeLead(${mylist[i].LeadID})" id="Closebtn" >Close</button></td>
+                                </tr>`
+                            table.innerHTML+=row;
+                        }
+                
+                    paginationbtn(d1.pages)
+                }
+                function closeLead(id){
+                    axios.put(`https://blissful-dream-production.up.railway.app/lead/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${id}`,{Status:true}).then(response=>{
+                            
+                            if(response.data.message){
+                                alert("Lead Close");
+                                location.reload();
+                            }
+                            else{
+                                alert("Lead Not Close");
+                            }
+                      })    
+                }
+                //sorting columns
+            
+                $(document.getElementsByClassName("clicked-heading")).on('click',function(){
+                    var column=$(this).data("column")
+                    var order=$(this).data("order")
+                    var text=$(this).html()
+                    text = text.substring(0,text.length-1);
+                    if(order=='desc'){
+                        $(this).data('order','asec')
+                        data=data.sort((a,b)=>a[column]>b[column]?1:-1)
+                        text+='&#9660'
+                    }
+                    else{
+                        $(this).data('order','desc')
+                        data=data.sort((a,b)=>a[column]<b[column]?1:-1)
+                        text+='&#9650'
+                    }
+                    $(this).html(text)
+                    state.querySet=data
+                    showtable();
+                })
+                
+                // Search table or filter table
+                $("#search-input").keyup(()=>{
+                        var value=$("#search-input").val();
+                        var data1=searchTable(value,data)
+                        state.querySet=data1
+                        state.page=1
+                        showtable()
+                })
+                
+                function searchTable(value,data){
+                    var filteredarray=[];
+                    for(var i=0;i<data.length;i++)
+                    {
+                        value=value.toLowerCase()
+                        var name=data[i].LeadName.toLowerCase()
+                        if(name.includes(value)){
+                            filteredarray.push(data[i])
+                        }
+                    }
+                    return filteredarray;
+                }
+            </script>
+    </body>
+</html>

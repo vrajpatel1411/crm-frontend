@@ -1,0 +1,130 @@
+/* index.html Styling Starts*/
+#main-card{
+    border:2px;
+    border-color: black;
+    border-radius: 10px;
+    border-style: none;
+    box-shadow: 2px 2px 3px 2px grey;
+    box-sizing: border-box;
+    width: 20%;
+    padding:5px 5px 5px 5px;
+    margin:10% auto;
+}
+#header{
+    color:#00669e;
+    text-align: center;
+}
+#main-card-header{
+    padding:0px;
+    border-style:none;
+    text-align: center;
+    color:#00669e;
+}
+#errmsg,#errmsg1{
+    padding-left:10px;
+    margin:0px;
+    color:red;
+}
+#input-field,#input-field1 {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+#main-username,#main-password{
+    padding: 5px;
+}
+#forgetpswd{
+    color:black;
+    padding:10px;
+}
+#forgetpswd:hover{
+    color:blue;
+    background-color: white;
+}
+hr{
+    height:2px;
+    color:gray;
+    background-color:gray;
+    border-radius: 100%;
+}
+.button-16 {
+    background-color: #dae0e5;
+    border: 1px solid #f8f9fa;
+    border-radius: 4px;
+    color: #3c4043;
+    cursor: pointer;
+    font-family: arial,sans-serif;
+    font-size: 14px;
+    height: 36px;
+    line-height: 27px;
+    min-width: 54px;
+    margin:8px 8px;
+    padding: 0 16px;
+    text-align: center;
+    touch-action: manipulation;
+    white-space: pre;
+  }
+  
+  .button-16:hover {
+    border-color: #dadce0;
+    box-shadow: rgba(0, 0, 0, .1) 0 1px 1px;
+    color: #202124;
+  }
+  
+  .button-16:focus {
+    border-color: #4285f4;
+}
+
+
+/* index.html Styling Ends  */
+
+/* Navigation css starts */
+#nav-items{
+    list-style-type: none;
+    margin:0px;
+    padding:2px;
+    overflow: hidden;
+    background-color: #b5cef7; 
+    border-radius: 5px;
+    
+}
+li{
+    float:left;
+}
+a{
+    display: block;
+    border-radius: 4px;
+    color:black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+a:hover {
+    background-color: rgb(207, 241, 241);
+}
+#user{
+    pointer-events: none;
+}
+#user,#logout{
+      float: right;
+}
+/* Navigation css ends */
+@media only screen and (max-width: 600px){
+    #main-card{
+        width:50%;
+    }
+}
+@media only screen and (min-width:600px) and (max-width :1000px){
+      #main-card{
+          width:42%;
+      }
+}
+@media only screen and (max-width: 400px){
+    #main-card{
+        width:100%;
+    }
+}

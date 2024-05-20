@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+    <head>
+        <%- include('./Partials/head') %>
+        <link rel="Stylesheet" type="text/css" href="addnewlead.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>     
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <style>
+            .Productname {
+                font-size: medium;
+            }   
+            .modal {
+                    position: fixed; /* Stay in place */
+                    z-index: 1; /* Sit on top */
+                    left: 0;
+                    top: 0;
+                    width: 100%; /* Full width */
+                    height: 100%; /* Full height */
+                    overflow: auto; /* Enable scroll if needed */
+                    background-color: rgb(0,0,0); /* Fallback color */
+                    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                    
+            }
+
+            .modal-content {
+                    background-color: #fefefe;
+                    margin: 10% auto; /* 15% from the top and centered */
+                    padding: 20px;
+                    border: 1px solid #888;
+                    width: 80%; /* Could be more or less, depending on screen size */
+                    border-radius: 10px;
+                    box-shadow: 1px 1px 13px ;
+            }
+            ul{
+                margin:15px;
+                font-weight: bold;
+                font-style:normal;
+                font-size: medium;
+                padding:10px;
+            }
+            ul > li{
+                padding-bottom:2px;
+            }
+            .close {
+                    color: #aaa;
+                    float: right;
+                    font-size: 20px;
+                    font-weight: bold;
+            }
+            .close:hover,
+            .close:focus {
+                    color: black;
+                    text-decoration: none;
+                    cursor: pointer;
+            }
+            #modal-content-container{
+                margin:20px;
+                padding:20px
+            }
+            button{
+                background-color: 8D8DAA;
+                color: black;
+                padding: 14px 20px;
+                font-weight: bold;
+                margin: 0 auto;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            button:hover{
+                background-color: rgb(160, 160, 190);
+                font-weight: bold;
+            }
+            #product-left{
+                display: flex;
+            }
+            #product-left>div{
+                margin: 10px;
+            }
+            #product-right,#productcontainer{
+                margin:10px;
+            }
+            #Deletebatch{
+                margin-top:0px;
+                margin-left:10px;
+            }
+            .Listitems{
+                margin-bottom: 2px;
+                padding:2px;
+            }
+            #mainloader,#loader{
+                    position: relative;
+                    left: 50%;
+                    top: 50%;
+                    z-index: 1;
+                    width: 12px;
+                    height: 12px;
+                    margin: 30px 0 0 10px;
+                    border: 16px solid #f3f3f3;
+                    border-radius: 50%;
+                    border-top: 16px solid #3498db;
+                    -webkit-animation: spin 2s linear infinite;
+                    animation: spin 2s linear infinite;
+                }
+
+                @-webkit-keyframes spin {
+                    0% { -webkit-transform: rotate(0deg); }
+                    100% { -webkit-transform: rotate(360deg); }
+                }
+
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }  
+                
+            .animate-bottom {
+                    position: relative;
+                    -webkit-animation-name: animatebottom;
+                    -webkit-animation-duration: 1s;
+                    animation-name: animatebottom;
+                    animation-duration: 1s;
+            }
+            @-webkit-keyframes animatebottom {
+                from { bottom:-100px; opacity:0 } 
+                to { bottom:0px; opacity:1 }
+            }
+            
+            @keyframes animatebottom { 
+                from{ bottom:-100px; opacity:0 } 
+                to{ bottom:0; opacity:1 }
+            }
+           
+        </style>
+    </head>
+    <body>
+        <%- include('./Partials/header') %>
+       
+        <div id="main-container">
+            <div id="product-left">
+                 <div id="add-product-btn">
+                    <button id="productbtn"  onclick="addProduct()">Add Product</button>
+                 </div> 
+                 <div id="add-batch">
+                    <button id="batchbtn" onclick="addBatch()">Add Batch</button>
+                 </div>
+            </div>
+            <div id="product-right">
+                   <h4>All Product List</h4>
+                   <hr>
+                   <div id="mainloader" style="display: block;"></div>
+                   <div id="productcontainer" style="display: none;" class="animate-bottom">
+                    </div>
+            </div>
+        </div>
+        <div id="myModal" style="display:none"class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <div id="loader" style="display: block;"></div>
+                
+              <div id="modal-content-container"  style="display: none;"  class="animate-bottom"></div>
+
+            </div>
+        </div>
+          
+          </div> 
+        <script>
+            let ClientID='<%=clientid%>'
+            let Product=[];
+
+            $('.close').on('click',()=>{
+                
+                $('#myModal').css('display','none');
+            })
+            
+            window.onclick = function(event) {
+                if (event.target == document.getElementById('myModal')) {
+                    $('#myModal').css('display','none');
+                }
+            }
+
+            function addProduct(){
+                $('#myModal').css('display','block');
+                const myNode = document.getElementById("modal-content-container");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.lastChild);
+                }
+                let e= `<div>
+                        <form method="post" action="/addProduct">
+                            <div class="col">
+                                <input type="hidden" name="_csrf" value="<%=csrftoken%>">
+                                <span style="color:#ff0000">*</span><label for="Productname"><b>Product Name:</b></label>
+                                <input  id="prodname" type="text" name="ProdName" placeholder="Add Product name" required>
+                            </div>        
+                            <div class="col">
+                                <input type="submit" id="addleadbtn" value="Add Product">
+                            </div>
+                        </form>
+                    </div>`
+                document.getElementById('modal-content-container').innerHTML+=e;
+                $('#loader').css("display","none");
+                $(myNode).css("display","block");
+                
+            }
+
+            function addBatch(){
+                $('#myModal').css('display','block');
+                const myNode = document.getElementById("modal-content-container");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.lastChild);
+                }
+                
+                let e='<form method="post" action="/addBatch">'
+                e+=`<input type="hidden" name="_csrf" value="<%=csrftoken%>">
+                <label for="Productname">Select Product:</label>
+                <select name="ProdID" id="Productname">`
+                for(let i in Product){
+                    e+=`<option value=${Product[i].ProdID}>${Product[i].ProdName}</option>`
+                }
+                
+                e+='</select>'
+                e+=`<label for="FromDate">Select Start Date:</label>
+                    <input type="Date" id="FromDate" name="FromDate">
+                    <label for="EndDate">Select End Date:</label>
+                    <input type="Date" id="EndDate" name="EndDate">
+                    <input type="submit" value="Add Batch">`
+                document.getElementById('modal-content-container').innerHTML+=e+'</form>';
+                $(myNode).css("display","block");
+                $('#loader').css("display","none");
+                
+            }
+            
+            function Deletebatch(id){
+                axios.delete(`https://blissful-dream-production.up.railway.app/batch/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${id}`).then(res=>{
+                    if(res.data.message)
+                    {
+                        alert("Batch Deleted")
+                        
+                    }
+                    else{
+                        alert("Batch Not Deleted");
+                        
+                    }
+                    location.reload();
+                }).catch(err=>{
+
+                })
+
+            }
+
+            function buildBatchContent(availablebatch){
+                let e=`
+                <h4>Available Batches </h4>
+                <hr>
+                <ul>   `;
+                for( let i in availablebatch)
+                {
+                    e+=`<div class="Listitems"><li>${availablebatch[i].FromDate} - ${availablebatch[i].ToDate}</li> <input type="button" id="Deletebatch" onclick="Deletebatch(${availablebatch[i].BatchID})" value="Delete Batch"></div><br>`
+                }
+                e+=`</ul>`
+                document.getElementById('modal-content-container').innerHTML+=e;
+                $('#loader').css("display","none");
+                const myNode = document.getElementById("modal-content-container");
+
+                $(myNode).css("display","block");
+            }
+            
+            function seeBatches(id){
+                $('#myModal').css('display','block');
+                const myNode = document.getElementById("modal-content-container");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.lastChild);
+                }
+                var today = new Date();
+                var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                axios.get(`https://blissful-dream-production.up.railway.app/batch/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${id}`).then(response=>{
+                    let batch=response.data.data;
+                    if(response.data.status){
+                        let cavailablebatch=batch.filter(a=>{
+                            var tempdate=new Date(a.FromDate);
+                            if(tempdate>=today)
+                            {
+                                return a;
+                            }
+                            else{
+                                return;
+                            }
+                        })
+                        if(cavailablebatch.length>0)
+                        {
+                            buildBatchContent(cavailablebatch)    
+                        }  
+                        else{
+                            document.getElementById('modal-content-container').innerHTML+="No Batches Available";
+                            $('#loader').css("display","none");
+                            $(myNode).css("display","block");
+                        }
+                    }
+                    else{
+                        document.getElementById('modal-content-container').innerHTML+="No Batches Available";
+                        $('#loader').css("display","none");
+                        $(myNode).css("display","block");
+                    }
+                })
+            }
+
+            function deleteProduct(id){    
+                axios.delete(`https://blissful-dream-production.up.railway.app/product/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${id}`).then(res=>{
+                    if(res.data.message)
+                    {
+                        alert("Product Deleted");
+                        location.reload();
+                    }
+                    else{
+                        alert("Product Not Deleted");
+                        location.reload();
+                    }
+                })
+                .catch(err=>{
+                    alert("Product Not Deleted");
+                        location.reload();
+                })
+            }
+
+            function getProduct(){
+                let productContainer=document.getElementById('productcontainer');
+                axios.get(`https://blissful-dream-production.up.railway.app/product/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/client/${ClientID}`).then(res=>{
+                    Product=res.data.data
+                    let e='<table>'
+                    for(var i in Product)
+                    {
+                        e+=`<tr class="productclass">
+                                <td class="productName">${Product[i].ProdName}</td>
+                                <td><button class="seebatches"  onclick="seeBatches(${Product[i].ProdID})">See Batches</button></td>
+                                <td><button class="deleteproduct" onclick="deleteProduct(${Product[i].ProdID})">Delete Product</button></td>
+                            </tr>
+                        `
+                    }    
+                    productContainer.innerHTML+=e+'</table>'
+                    $('#mainloader').css("display","none");
+                    $('#productcontainer').css("display","block");
+                
+                })
+                .catch(err=>{
+                })
+            }
+
+            window.onload=()=>{
+                let msg='<%=msg%>'
+                if(msg){
+                    alert(msg);
+                }
+                const myNode = document.getElementById("modal-content-container");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.lastChild);
+                }
+                getProduct()
+            }
+        
+        </script>
+    </body>

@@ -1,0 +1,18 @@
+<div id="main-nav">
+  <ul id="nav-items">
+    <% if(role==='Admin'){%>
+    <li><a href="/homepage">Home</a></li>
+    <li><a href="/AddNewLead">Lead</a></li>
+    <li><a href="/User">User</a></li>
+    <li><a href="/Product">Products</a></li>
+    <!-- <li><a href="/AddDeleteProduct">ADD/Delete Product</a></li> -->
+    <li id="logout"><a href="/Logout">Logout</a></li>
+    <li id="user"><a>Welcome,<%=user%> </a></li>
+    <%}else{%>
+    <li><a href="/homepage">Home</a></li>
+    <li><a href="/AddNewLead">Lead</a></li>
+    <li id="logout"><a href="/Logout">Logout</a></li>
+    <li id="user"><a>Welcome,<%=user%> </a></li>
+    <%}%>
+  </ul>
+</div>

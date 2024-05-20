@@ -1,0 +1,269 @@
+<html>
+    <head>
+        <%- include('./Partials/head') %>
+        <link rel="Stylesheet" type="text/css" href="addnewlead.css">
+        <style>
+            .row{
+                display:flex;
+                flex-direction: row;
+            }
+            .col{
+                width:50%;
+                margin:1%;
+            }
+            #leadnote{
+                padding:10px;
+            }
+            #newlead{
+                display: flex;
+                
+            }
+            @media only screen and (max-width: 1000px){
+                .row{
+                    flex-direction: column;
+                }
+                .col{
+                    width: 100%;
+                }
+                #newleadmain{
+                    margin-top:3%;
+                }
+                #submainnewlead{
+                    width: 80%;
+                    margin:2%
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <%- include('./Partials/header') %>
+        <div id="maincontainer">
+            <% if(role==="admin") {%>
+                <div id="newlead">
+                    <div>
+                        <form method="post" action="/addlead">
+                <div id="submainnewlead1">
+                    <div id="leaddetails">
+                        <h4>Lead Details</h4>
+                        <hr>
+                        <% if(msg){%>
+                            <p id="errmsg"><%= msg %> </p> 
+                            <%}%>
+                    </div>    
+                    <div id="submainleadname" class="row">
+                        <div class="col">
+                            <input type="hidden" name="_csrf" value="<%=csrftoken%>">
+                            <span style="color:#ff0000">*</span><label for="leadname"><b>Name:</b></label>
+                            <input  id="leadname" type="text" name="leadname" placeholder="Add lead name" required>
+                        </div>
+                    </div>
+                    <div id="submainnumber" class="row">
+                        <div class="col">
+                            <span style="color:#ff0000">*</span><label for="mobilenumber"><b>Mobile Number:</b></label>
+                            <input id="mobilenumber" type="text" name="mobilenumber" placeholder="Enter Your Mobile Number" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required>
+                        </div>
+                        <br>
+                        <div class="col">
+                            <span style="color:white">*</span><label for="Altnumber"><b>Alternate Mobile Number:</b></label>
+                            <input id="Altnumber" type="text" name="mobilenumber" placeholder="Enter Alternate Number" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"  >
+                        </div>
+                    </div>
+                    <div id="submainemailid" class="row">
+                        <div class="col">
+                            <span style="color:#ff0000">*</span><label for="emailid"><b>Email Id:</b></label>
+                            <input id="emailid" type="Email" name="email" placeholder="Enter your email" required> 
+                        </div>
+                        <br>
+                        <div class="col">
+                            <span style="color:white">*</span><label for="altemailid"><b>Email Id:</b></label>
+                            <input id="altemailid" type="Email" name="email" placeholder="Enter Alternate email" > 
+                        </div>
+                    </div>
+                    <div id="submainleaddate" class="row">
+                        <div class="col">
+                            <span style="color:#ff0000">*</span><label for="leaddate"><b>Lead Date:</b></label>
+                            <input id="leaddate" type="date" name="leaddate" required>
+                        </div>
+                        <div class="col">
+                            <span style="color:#ff0000">*</span><label for="Source"><b>Lead Source:</b></label>
+                            <select id="Source" name="Source">
+                                <option value="null">Select source</option>
+                                <option value="Google">Google</option>
+                                <option value="Facebook">Facebook</option>
+                                <option value="Intagram">Instagram</option>
+                                <option value="Ads">Ads</option>
+                                <option value="family/friend reference">Family/friend reference</option>
+                            </select>
+                        </div> 
+                    </div>
+                    <div id="submainleadnote" class="row"> 
+                        <div class="col">
+                            <span style="color:#ff0000">*</span><label for="leadnote"><b>Lead Note:</b></label>
+                            <textarea id="leadnote" type="text" name="leadnote" placeholder="Enter Lead Note" rows="10" cols="50" required></textarea>    
+                        </div>
+                    </div>
+                    <div id="leadstatus" class="row">
+                        <div class="col">
+                            <span style="color:#ff0000">*</span><label for="status"><b>Lead status:</b></label>
+                            <select id="status" name="status" required>
+                                <option value="null">Select status</option>
+                                <option value="Interested">Interested</option>
+                                <option value="Not Interested">Not Interested</option>
+                                <option value="Not Decided">Not Decided</option>
+                            </select>
+                        </div>
+                        <div id="leadstatusdate" class="col"> 
+                            <span style="color:#ff0000">*</span><label for="statusdate"><b>Status Date:</b></label>
+                            <input id="statusdate" type="date" name="statusdate" required>
+                        </div>
+                    </div>
+                    <div id="leadfollowupdate" class="row">
+                        <div class="col">
+                            <span style="color:white">*</span><label for="followupdate"><b>Next followup Date:</b></label>
+                            <input id="followupdate" type="date" name="nextfollowupdate">
+                        </div>
+                    </div>
+                    <div id="submainleadcompany" class="row">
+                        <div class="col">
+                            <span style="color:#ff0000">*</span><label for="orgtype"><b>Organization type:</b></label>
+                            <select id="orgtype" name="Organtype" required>
+                                <option value="null">Select Organization Type</option>
+                                <option value="Interested">Company</option>
+                                <option value="Not Interested">Individual</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <span style="color:#ff0000">*</span><label for="orgname"><b>Organization:</b></label>
+                            <input  id="orgname" type="text" name="orgname" placeholder="Add Organization name" required>
+                        </div>
+                    </div>
+                    <div id="submitform">
+                        <input type="submit" value="Add Lead">
+                    </div>
+                </div>
+                        </form>
+                    </div>
+                    <div id="Bulknewlead">
+                    <div id="bulkform">
+                        <h4>Add Lead by using excel or csv file</h4>
+                        <hr>
+                        <% if(msg1){%>
+                            <p id="errmsg1"><%= msg1 %> </p> 
+                        <%}%>
+                        <form method="post" action="/addbulklead" enctype="multipart/form-data">
+                            <!-- <input type="hidden" name="_csrf" value="<%=csrftoken%>"> -->
+                            <input type="file" name="uploadfile"  placeholder="Add Lead" required>
+                            <input type="submit" >
+                        </form>
+                    </div>
+                    </div>
+                </div>
+            <% }else{%>
+                <div id="newleadmain">
+                    <form method="post" action="/addlead">
+                    <div id="submainnewlead">
+                        <div id="leaddetails">
+                            <h4>Lead Details</h4>
+                            <hr>
+                            <% if(msg){%>
+                                <p id="errmsg"><%= msg %> </p> 
+                                <%}%>
+                        </div>    
+                        <div id="submainleadname" class="row">
+                            <div class="col">
+                                <input type="hidden" name="_csrf" value="<%=csrftoken%>">
+                                <span style="color:#ff0000">*</span><label for="leadname"><b>Name:</b></label>
+                                <input  id="leadname" type="text" name="leadname" placeholder="Add lead name" required>
+                            </div>
+                        </div>
+                        <div id="submainnumber" class="row">
+                            <div class="col">
+                                <span style="color:#ff0000">*</span><label for="mobilenumber"><b>Mobile Number:</b></label>
+                                <input id="mobilenumber" type="text" name="mobilenumber" placeholder="Enter Your Mobile Number" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required>
+                            </div>
+                            <br>
+                            <div class="col">
+                                <span style="color:white">*</span><label for="Altnumber"><b>Alternate Mobile Number:</b></label>
+                                <input id="Altnumber" type="text" name="mobilenumber" placeholder="Enter Alternate Number" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"  >
+                            </div>
+                        </div>
+                        <div id="submainemailid" class="row">
+                            <div class="col">
+                                <span style="color:#ff0000">*</span><label for="emailid"><b>Email Id:</b></label>
+                                <input id="emailid" type="Email" name="email" placeholder="Enter your email" required> 
+                            </div>
+                            <br>
+                            <div class="col">
+                                <span style="color:white">*</span><label for="altemailid"><b>Email Id:</b></label>
+                                <input id="altemailid" type="Email" name="email" placeholder="Enter Alternate email" > 
+                            </div>
+                        </div>
+                        <div id="submainleaddate" class="row">
+                            <div class="col">
+                                <span style="color:#ff0000">*</span><label for="leaddate"><b>Lead Date:</b></label>
+                                <input id="leaddate" type="date" name="leaddate" required>
+                            </div>
+                            <div class="col">
+                                <span style="color:#ff0000">*</span><label for="Source"><b>Lead Source:</b></label>
+                                <select id="Source" name="Source">
+                                    <option value="null">Select source</option>
+                                    <option value="Google">Google</option>
+                                    <option value="Facebook">Facebook</option>
+                                    <option value="Intagram">Instagram</option>
+                                    <option value="Ads">Ads</option>
+                                    <option value="family/friend reference">Family/friend reference</option>
+                                </select>
+                            </div> 
+                        </div>
+                        <div id="submainleadnote" class="row"> 
+                            <div class="col">
+                                <span style="color:#ff0000">*</span><label for="leadnote"><b>Lead Note:</b></label>
+                                <textarea id="leadnote" type="text" name="leadnote" placeholder="Enter Lead Note" rows="10" cols="50" required></textarea>    
+                            </div>
+                        </div>
+                        <div id="leadstatus" class="row">
+                            <div class="col">
+                                <span style="color:#ff0000">*</span><label for="status"><b>Lead status:</b></label>
+                                <select id="status" name="status" required>
+                                    <option value="null">Select status</option>
+                                    <option value="Interested">Interested</option>
+                                    <option value="Not Interested">Not Interested</option>
+                                    <option value="Not Decided">Not Decided</option>
+                                </select>
+                            </div>
+                            <div id="leadstatusdate" class="col"> 
+                                <span style="color:#ff0000">*</span><label for="statusdate"><b>Status Date:</b></label>
+                                <input id="statusdate" type="date" name="statusdate" required>
+                            </div>
+                        </div>
+                        <div id="leadfollowupdate" class="row">
+                            <div class="col">
+                                <span style="color:white">*</span><label for="followupdate"><b>Next followup Date:</b></label>
+                                <input id="followupdate" type="date" name="nextfollowupdate">
+                            </div>
+                        </div>
+                        <div id="submainleadcompany" class="row">
+                            <div class="col">
+                                <span style="color:#ff0000">*</span><label for="orgtype"><b>Organization type:</b></label>
+                                <select id="orgtype" name="Organtype" required>
+                                    <option value="null">Select Organization Type</option>
+                                    <option value="Interested">Company</option>
+                                    <option value="Not Interested">Individual</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <span style="color:#ff0000">*</span><label for="orgname"><b>Organization:</b></label>
+                                <input  id="orgname" type="text" name="orgname" placeholder="Add Organization name" required>
+                            </div>
+                        </div>
+                        <div id="submitform">
+                            <input type="submit" value="Add Lead">
+                        </div>
+                    </div>
+                    </form>
+                    </div>
+            <%}%>
+            </div>
+        </div>
+    </body>
+</html>

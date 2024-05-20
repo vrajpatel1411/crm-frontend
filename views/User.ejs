@@ -1,0 +1,424 @@
+<html>
+  <head>
+    <title>Login</title>
+
+    <%- include('./Partials/head') %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link
+      rel="Stylesheet"
+      type="text/css"
+      href="addnewlead.css" />
+    <style>
+      .row {
+        display: flex;
+        flex-direction: row;
+      }
+      .col {
+        width: 50%;
+        margin: 2%;
+      }
+      #addleadbtn {
+        width: fit-content;
+      }
+      /* #newusermain{
+                display: flex;
+                flex-direction: column;
+            } */
+      #Usertable {
+        margin-top: 5%;
+        margin-left: 10px;
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+      .userdata {
+        padding: 5px;
+        border: 1px solid black;
+      }
+
+      #Addclientuser {
+        float: right;
+        width: 60%;
+        margin: 1%;
+      }
+
+      #AllClientUser {
+        float: left;
+        width: 36%;
+        margin: 1%;
+      }
+
+      @media only screen and (max-width: 1000px) {
+        .row {
+          flex-direction: column;
+        }
+        .col {
+          width: 100%;
+        }
+        #newleadmain {
+          margin: 3%;
+        }
+        #submainnewlead1 {
+          width: 80%;
+          margin: 2%;
+        }
+      }
+      #mainloader,
+      #loader {
+        position: relative;
+        left: 50%;
+        top: 50%;
+        z-index: 1;
+        width: 12px;
+        height: 12px;
+        margin: 30px 0 0 10px;
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+      }
+
+      @-webkit-keyframes spin {
+        0% {
+          -webkit-transform: rotate(0deg);
+        }
+        100% {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .animate-bottom {
+        position: relative;
+        -webkit-animation-name: animatebottom;
+        -webkit-animation-duration: 1s;
+        animation-name: animatebottom;
+        animation-duration: 1s;
+      }
+      @-webkit-keyframes animatebottom {
+        from {
+          bottom: -100px;
+          opacity: 0;
+        }
+        to {
+          bottom: 0px;
+          opacity: 1;
+        }
+      }
+
+      @keyframes animatebottom {
+        from {
+          bottom: -100px;
+          opacity: 0;
+        }
+        to {
+          bottom: 0;
+          opacity: 1;
+        }
+      }
+
+      .modal {
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0); /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+      }
+
+      /* Modal Content/Box */
+      .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+        border-radius: 10px;
+        box-shadow: 1px 1px 13px;
+      }
+
+      /* The Close Button */
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('./Partials/header') %>
+    <div>
+      <div
+        id="mainloader"
+        style="display: block"></div>
+
+      <div
+        id="newusermain"
+        style="display: none">
+        <div id="AllClientUser">
+          <h4>Client Agents/Users</h4>
+          <hr />
+          <div
+            id="loader"
+            style="display: block"></div>
+          <div
+            id="Clientusercontainer"
+            style="display: none"
+            class="animate-bottom"></div>
+        </div>
+        <div id="Addclientuser">
+          <form
+            method="post"
+            action="/addUser">
+            <div id="submainnewuser">
+              <div id="leaddetails">
+                <h4>Agent/User Details</h4>
+                <hr />
+                <% if(msg){%>
+                <p id="errmsg"><%= msg %></p>
+                <%}%>
+              </div>
+              <div
+                id="submainClientname"
+                class="row">
+                <div class="col">
+                  <input
+                    type="hidden"
+                    name="_csrf"
+                    value="<%=csrftoken%>" />
+                  <span style="color: #ff0000">*</span
+                  ><label for="Clientname"><b>Client Name:</b></label>
+                  <input
+                    id="Clientname"
+                    type="text"
+                    name="Clientname"
+                    placeholder="Add Client name"
+                    required />
+                </div>
+              </div>
+              <div
+                id="submainUsername"
+                class="row">
+                <div class="col">
+                  <span style="color: #ff0000">*</span
+                  ><label for="Username"><b>User Name:</b></label>
+                  <input
+                    id="Username"
+                    type="text"
+                    name="Username"
+                    placeholder="Add User name"
+                    required />
+                </div>
+              </div>
+              <div
+                id="submainemailid"
+                class="row">
+                <div class="col">
+                  <span style="color: #ff0000">*</span
+                  ><label for="Password"><b>Password:</b></label>
+                  <input
+                    id="Password"
+                    type="password"
+                    name="password"
+                    placeholder="Enter your Password"
+                    required />
+                  <br />
+                </div>
+                <div class="col">
+                  <span style="color: #ff0000">*</span
+                  ><label for="rpassword"><b>Re enter Password:</b></label>
+                  <input
+                    id="rpassword"
+                    type="text"
+                    name="rpassword"
+                    placeholder="Enter password again"
+                    required />
+                </div>
+              </div>
+              <div
+                id="submitform"
+                class="row">
+                <div class="col">
+                  <span style="color: #ff0000">*</span
+                  ><label for="Roles"><b>Roles:</b></label>
+                  <select
+                    id="Roles"
+                    name="Roles"
+                    required>
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option>
+                  </select>
+                  <br />
+                </div>
+              </div>
+              <div class="col">
+                <input
+                  type="submit"
+                  id="addleadbtn"
+                  value="Add Lead" />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div
+      id="myModal"
+      style="display: none"
+      class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="addproductoption">
+          <div id="remainingusers"></div>
+          <div id="assignAndDelete">
+            <button
+              onclick="assignAndDelete()"
+              id="addproductbtn">
+              Assign and Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      var clientid = `<%=clientid%>`;
+      var user = [];
+      var deleteleadid = "";
+      var assignleadid = "";
+      var span = document.getElementsByClassName("close");
+      $(".close").on("click", () => {
+        $("#myModal").css("display", "none");
+      });
+
+      window.onclick = function (event) {
+        if (event.target == document.getElementById("myModal")) {
+          $("#myModal").css("display", "none");
+        }
+      };
+
+      $(document).ready(() => {
+        $("#mainloader").css("display", "none");
+        $("#newusermain").css("display", "block");
+        $("#myModal").css("display", "none");
+      });
+
+      function assignAndDelete() {
+        var remuser = document.getElementById("remuser");
+        var value = remuser.value;
+        assignleadid = value;
+        axios
+          .put(
+            `https://blissful-dream-production.up.railway.app/lead/${window.localStorage.getItem(
+              "token"
+            )}/${window.localStorage.getItem("username")}/user/${deleteleadid}`,
+            { UserID: assignleadid }
+          )
+          .then((response) => {
+            if (response.data.message) {
+              axios
+                .delete(
+                  `https://blissful-dream-production.up.railway.app/user/${window.localStorage.getItem(
+                    "token"
+                  )}/${window.localStorage.getItem("username")}/${deleteleadid}`
+                )
+                .then((res) => {
+                  alert("User Deleted");
+                  location.reload();
+                })
+                .catch((err) => {
+                  alert("User Not Deleted");
+                  location.reload();
+                });
+            } else {
+              alert("User Not Deleted");
+
+              location.reload();
+            }
+          })
+          .catch((err) => {});
+      }
+      function buildTable(data) {
+        let clientcontainer = document.getElementById("Clientusercontainer");
+        clientcontainer.innerHTML = " ";
+        let head = `
+                    <table id="Usertable">
+                            <tr class="userdata">
+                                <th class="userdata">User Name</th>
+                                <th class="userdata">User Role</th>
+                                <th class="userdata">Delete</th>
+                            </tr>
+                            `;
+        for (let i in data) {
+          let body = `
+                        <tr class="userdata">
+                            <td class="userdata">${data[i].UserName}</td>
+                            <td class="userdata">${data[i].UserRole}</td>
+                            <td class="userdata"><button class="deleteuser" onClick="deleteUser(${data[i].UserID})">Delete</button>
+                        <tr>
+                        `;
+          head += body;
+        }
+        clientcontainer.innerHTML += head + `</table>`;
+        $("#loader").css("display", "none");
+        $("#Clientusercontainer").css("display", "block");
+      }
+
+      axios
+        .get(
+          `https://blissful-dream-production.up.railway.app/user/${window.localStorage.getItem(
+            "token"
+          )}/${window.localStorage.getItem("username")}/${clientid}`
+        )
+        .then((res) => {
+          let data = res.data.Data;
+          user = data;
+          buildTable(user);
+        });
+
+      function deleteUser(id) {
+        $("#myModal").css("display", "block");
+        filtereduser = user.filter((d) => d.UserID != id);
+        getRemainingUsers(filtereduser);
+        deleteleadid = id;
+      }
+
+      function getRemainingUsers(data) {
+        document.getElementById("remainingusers").innerHTML = " ";
+        $("#remainingusers").append(
+          $(document.createElement("select")).prop({
+            id: "remuser",
+            name: "remuser",
+          })
+        );
+        for (var i in data) {
+          $("#remuser").append(
+            $(document.createElement("option")).prop({
+              value: data[i].UserID,
+              text: data[i].UserName,
+            })
+          );
+        }
+      }
+    </script>
+  </body>
+</html>

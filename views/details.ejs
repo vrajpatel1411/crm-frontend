@@ -1,0 +1,684 @@
+<html>
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>     
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <!-- <link rel="Stylesheet" type="text/css" href="addnewlead.css"> -->
+        <style>
+            body{
+                font-family: 'Roboto', sans-serif;
+                position: relative;
+                /* overflow:hidden; */
+            }
+            h2{
+                margin:0px;
+                margin-left:2%;
+                margin-right:2% ;
+                padding:3px;
+            }
+            hr{
+                margin-left: 2%;
+            }
+            #back-button{
+                margin-top:10px;
+                margin-left:10px;
+            }
+            /* #details-main-content{
+                display:flex;
+                flex-direction:row;
+                margin:10px;
+                position: relative;
+            } */
+            .leaddetails-row{
+                padding:10px;
+            }
+            #details-right{
+                overflow-x: auto;
+                overflow-y: auto;
+                text-align:justify;
+            }
+            #back-button{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin:2%;
+                padding: 15px;
+            }
+            tr{
+                padding:2%;
+            }
+            #followupform,#allfollowup{
+                margin-left:25px;
+                padding:5px;
+            }
+            #backbtn{
+                padding:0.5%;
+            }
+            #addfollup,#addproductbtn{
+                padding: 2%;
+                margin-top:1.5%;
+                margin-bottom:1.5%;
+            }
+            input[type=text],input[type=date],input[type=email],input[type=password],select {
+                width: 80%;
+                padding: 12px 20px;
+                margin: 8px 0;
+                display: inline-block;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+                
+            }
+            #details-Right{
+                float:right;
+                margin: 0.5%;
+                padding: 1%;
+                
+            }
+            #details-left{
+                float:left;
+                margin: 0.5%;
+                padding: 1%;
+             
+            }
+            #details-Right,#details-left{
+                background-color:rgb(252, 255, 255);
+                width:47%;
+                height: 80%;
+                border:1px solid white;
+                border-radius: 8px;
+                box-shadow:2px 3px 13px lightblue;
+                overflow-y: scroll;
+            }
+            #details-container{
+                margin:3px;
+                padding:10px;
+            }
+            .followupdata{
+                border: 1px solid rgb(240, 240, 255) ;
+                background-color: rgb(230, 245, 247);
+                border-radius:5px;
+                box-shadow: 1px 2px 2px rgb(13, 14, 14);
+                padding:4px; 
+                margin: 1%;   
+            }
+            .personaldetailstable{
+                border-spacing: 0px;
+                table-layout: fixed;
+                margin-left:30px;
+            }
+            .personaldetailsdata{padding:5px;
+                word-wrap: break-word;
+                width:30%;
+            }
+            #producttable{
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+            .producttabledata{
+                text-align: center;
+                padding:5px;
+                border: 1px solid black;
+            }
+            img{
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                
+            }
+            #addproductoption{
+                margin-left:30px;
+                margin-top:3px;
+            }
+            #product1{
+                margin:3px 3px 3px 0;
+            }
+            #product,#lead-details,#details-Right{
+                padding:3px;
+            }
+            @media (max-width: 870px) {
+                #details-main-content {
+                    flex-direction: column;
+                }
+                #details-Right,#details-left{
+                    width:100%
+                }
+            }
+            #mainloader,#loader,#loader1,#loader2 {
+                position: relative;
+                left: 50%;
+                top: 50%;
+                z-index: 1;
+                width: 12px;
+                height: 12px;
+                margin: 30px 0 0 10px;
+                border: 16px solid #f3f3f3;
+                border-radius: 50%;
+                border-top: 16px solid #3498db;
+                -webkit-animation: spin 2s linear infinite;
+                animation: spin 2s linear infinite;
+            }
+            ul{
+                margin-left:10px;
+            }
+            @-webkit-keyframes spin {
+                0% { -webkit-transform: rotate(0deg); }
+                100% { -webkit-transform: rotate(360deg); }
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+            .animate-bottom {
+                    position: relative;
+                    -webkit-animation-name: animatebottom;
+                    -webkit-animation-duration: 1s;
+                    animation-name: animatebottom;
+                    animation-duration: 1s;
+            }
+            @-webkit-keyframes animatebottom {
+                from { bottom:-100px; opacity:0 } 
+                to { bottom:0px; opacity:1 }
+            }
+            
+            @keyframes animatebottom { 
+                from{ bottom:-100px; opacity:0 } 
+                to{ bottom:0; opacity:1 }
+            }
+            .modal {
+                    position: fixed; /* Stay in place */
+                    z-index: 1; /* Sit on top */
+                    left: 0;
+                    top: 0;
+                    width: 100%; /* Full width */
+                    height: 100%; /* Full height */
+                    overflow: auto; /* Enable scroll if needed */
+                    background-color: rgb(0,0,0); /* Fallback color */
+                    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                    
+            }
+
+            .modal-content {
+                    background-color: #fefefe;
+                    margin: 10% auto; /* 15% from the top and centered */
+                    padding: 20px;
+                    border: 1px solid #888;
+                    width: 80%; /* Could be more or less, depending on screen size */
+                    border-radius: 10px;
+                    box-shadow: 1px 1px 13px ;
+            }
+            
+            .close {
+                    color: #aaa;
+                    float: right;
+                    font-size: 20px;
+                    font-weight: bold;
+            }
+
+            .close:hover,
+            .close:focus {
+                    color: black;
+                    text-decoration: none;
+                    cursor: pointer;
+            }
+            
+        </style>
+    </head>
+    <body>
+        <div id="mainloader" style="display:block;"></div>
+        <div id="mainsection" style="display:none;" class="animate-bottom" >
+            <div id="back-button">
+                <button id="backbtn"onclick="location.href='/homepage'">Back To homepage</button>
+            </div>
+            <div id="details-main-content">
+                <div id="details-left" class="animate-left">
+                    <div id="lead-details">
+                        <h2>Lead details</h2>
+                        <hr>
+                        <table class="personaldetailstable">
+                            <div id="lead-pesonal-information">
+                                <tr>
+                                    <td class="personaldetailsdata" ><b>Lead Name:</b></td><td><span><%=details.LeadName%></span></td>
+                                </tr>
+                                <% for(var i in details.mobilenumber){%>
+                                    <% if(details.mobilenumber[i][1]) {%> 
+                                        <tr>
+                                            <td class="personaldetailsdata" ><b>Mobile Number:</b></td><td><%=details.mobilenumber[i][1]%></td>
+                                        </tr>
+                                    <%}%>
+                                <%}%>
+                                <% for(var i in details.email){%>
+                                    <% if(details.email[i]) {%> 
+                                        <tr>
+                                            <td class="personaldetailsdata" ><b>Email:</b></td><td><%=details.email[i][1]%></td>
+                                        </tr>
+                                    <%}%>
+                                <%}%>
+                                <tr>
+                                    <td class="personaldetailsdata" ><b>Lead Note:</b></td><td><%=details.LeadNote%></td><td></td>
+                                </tr>
+                                <% if(details.LeadSource) {%>
+                                    <tr>
+                                        <td class="personaldetailsdata"><b>Lead Source:</b></td><td><%=details.LeadSource%></td><td></td>
+                                    </tr>
+                                <%}%>
+                                <% if(details.CompanyName) {%>
+                                    <tr>
+                                        <td class="personaldetailsdata"><b>Company Name:</b></td><td><%=details.CompanyName%></td><td></td>
+                                    </tr>
+                                <%}%>
+                                <% if(details.LeadType) {%>
+                                    <tr>
+                                        <td class="personaldetailsdata"><b>LeadType:</b></td><td><%=details.LeadType%></td><td></td>
+                                    </tr>
+                                    <%}%>
+                            </div>
+                        </table>
+                    </div>
+                    <div id="product">
+                    <div id="loader2" style="display:block;"></div>
+                    <div id="Clientproduct" style="display:none;" class="animate-bottom"></div>
+                    <h2>Add Client Product Interest</h2>
+                    <hr>
+                    <div id="productcontainer">
+                        <div id="addproductoption">
+                            <div id="toaddproduct"></div>
+                            <div id="addproduct">
+                                <button onclick="addproductbtn()" id="addproductbtn">Add Product</button>
+                            </div>
+                        </div>
+                        <div id="loader"></div>
+                        <div id="Productlist" style="display:none;" class="animate-bottom"></div>
+                    </div>
+                    <div id="emptycontainer" style="display:none;" class="animate-bottom">
+                        <img src="http://localhost:8080/images">
+                        <h3 style="text-align: center;">Nothing here</h3>
+                    </div>
+                    </div>
+                </div>
+                <div id="details-Right" class="animate-right">
+                    <div id="details-container">
+                        <h2>FollowUps</h2>
+                        <hr>
+                        <div id="followupform">
+                                <label >Date</label><br>
+                                <input type="date" id="fdate" name="followupdate"></input><br>
+                                <label>Contact Type</label><br>
+                                <input type="text" name="contacttype" id="Contacttype" placeholder="Enter the Contact Type"></input><br>
+                                <label>Remarks</label><br>
+                                <input type="text" name="remarks" id="remarks" placeholder="Enter the Remarks"></input><br>
+                                <label >Next Followup Date</label><br>
+                                <input type="date" id="Nextfdate" name="nextfdate"></input><br>
+                                <button id="addfollup">Add Followup</button>
+                        </div>
+                            
+                            <h2>Previous Followup</h2>
+                            <hr>
+                            <div id="loader1"></div>
+                            <div id="followupContainer">
+                                <div id="allfollowup" style="display:none;" class="animate-bottom"></div>
+                            </div>
+                            <div id="emptycontainer1" style="display:none;" class="animate-bottom">
+                                <img src="http://localhost:8080/images.png">
+                                <h3 style="text-align: center;">Nothing here</h3>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div id="myModal" style="display:none"class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <div id="modal-content-container"></div>
+
+            </div>
+        </div>
+        
+        <script>
+            var LeadId="<%= details.LeadID%>"
+            var ClientID="<%= details.ClientID%>"
+            var product=[];
+            var ProdID='';
+            var confirmProduct=[];
+            var clientproduct=[];
+            $('#mainloader').css("display","block");
+            $('.close').on('click',()=>{
+                $('#myModal').css('display','none');
+            })
+            
+            window.onclick = function(event) {
+                if (event.target == document.getElementById('myModal')) {
+                    $('#myModal').css('display','none');
+                }
+            }
+
+            window.onload = function() {
+                $('#mainloader').css("display","none");
+                $('#mainsection').css("display","block");
+                setInterval(()=>{$("#loader2").css("display","none");},'5000')
+            };
+
+            function addproductbtn(){   
+                    var product1=document.getElementById('product1')
+                    var value=product1.value;
+                    
+                    var data={
+                        LeadID:LeadId,
+                        ClientID:ClientID,
+                        ProdID:value,
+                        Status:false,
+                        InterestedInStatus:"Interested",
+                        InterestedInStatusDate:new Date()
+                    } 
+                    axios.post(`http://localhost:3000/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}`,data).then(res=>{
+                        alert("Product Added");
+                        location.reload();
+                    })
+                }
+
+            function getallproduct(){
+                document.getElementById('toaddproduct').innerHTML=" ";
+                $("#toaddproduct").append($(document.createElement('select')).prop({
+                        id: 'product1',
+                        name: 'product'
+                }))
+                axios.get(`http://localhost:3000/product/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/client/${ClientID}`).then(res=>{
+                    for(var i in res.data.data){
+                        $('#product1').append($(document.createElement('option')).prop({
+                                value: res.data.data[i].ProdID,
+                                text: res.data.data[i].ProdName
+                        }))
+                    }
+               })
+            }
+
+            $("#addfollup").on('click',function(){
+                var fdate=  $('#fdate').val();
+                var ct=$('#Contacttype').val();
+                var remarks=$("#remarks").val();
+                var nextfdate=$("#Nextfdate").val();
+                var data={
+                      LeadId:Number(LeadId),
+                      ClientID:Number(ClientID),
+                      FollowUpDate:fdate,
+                      ContactType:ct,
+                      Remarks:remarks
+                }
+                axios.post(`http://localhost:3000/followUp/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}`,data).then(res=>{
+                    if(res.data.message){
+                        axios.put(`http://localhost:3000/lead/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${LeadId}`,{NextFollowUpDate:nextfdate}).then(response=>{
+                            if(response.data){
+                                alert("Followup Added");
+                                location.reload();
+                            }
+                            else{
+                                alert("Followup Not Added");
+                            }
+                      })    
+                    }
+                    else{
+                            alert("Followup Not Added");
+                        }
+                  })
+                })
+
+            function getallfollowup(){
+                var a=document.getElementById('allfollowup');
+                a.innerHTML="";
+                axios.get(`http://localhost:3000/followup/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${LeadId}`).then(res=>{
+                    let data1=res.data.data;
+                    if(res.data.message){
+                        data1.map(data => {
+                                e=` 
+                                    <div class="followupdata">
+                                        <p> Follow Up Date: ${data.FollowUpDate}</p>
+                                        <p> Contact Type: ${data.ContactType}</p>
+                                        <p> Remarks: ${data.Remarks}</p>
+                                    </div>
+                                `
+                        a.innerHTML+=e ;  
+                        })
+                        $('#loader1').css("display","none");
+                        $('#allfollowup').css("display","block");
+                    }
+                    else{
+                        $('#loader1').css("display","none");
+                        $('#emptycontainer1').css("display","block");    
+                    }
+                })
+
+            }
+            function addbatch(){
+                var product1=document.getElementById('Batch')
+                var value=product1.value;
+                var data={
+                    ClientID:ClientID,
+                    LeadID:LeadId,
+                    ProdID:ProdID,
+                    BatchID:value,
+                }
+                axios.put(`http://localhost:3000/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/product/?prodid=${ProdID}&leadid=${LeadId}`,{Status:true}).then(async response=>{
+                }).catch(err=>{})
+                axios.post(`http://localhost:3000/alumni/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}`,data).then(res=>{
+                    if(res.data.message)
+                    {
+                        alert("Client has Enrolled");
+                    }
+                    else
+                    {
+                        alert("Client has not Enrolled");
+                    }
+                }).catch(err=>{})
+                location.reload();
+            }
+
+            function addBatch(prodid,data){
+                console.log('add batch')
+                    $('#myModal').css("display","block");
+                    const myNode = document.getElementById("modal-content-container");
+                    while (myNode.firstChild) {
+                        myNode.removeChild(myNode.lastChild);
+                    }
+                    let e;
+                    var today = new Date();
+                    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                    axios.get(`https://blissful-dream-production.up.railway.app/batch/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${ProdID}`).then(response=>{
+                        let batch=response.data.data;
+                        console.log(batch)
+                        if(response.data.status){
+                            let cavailablebatch=batch.filter(a=>{
+                                var tempdate=new Date(a.FromDate);
+                                if(tempdate>=today)
+                                {
+                                    return a;
+                                }
+                                else{
+                                    return;
+                                }
+                            })
+                            console.log(cavailablebatch)
+                            if(cavailablebatch.length>0)
+                            {
+                                e=`<label for="Batch">Select Batch:</label>
+                                       <select name="BatchID" id="Batch">`
+                                for(let i in cavailablebatch){
+                                        e+=`<option value=${cavailablebatch[i].BatchID}><b>${cavailablebatch[i].FromDate}</b> - <b>${cavailablebatch[i].ToDate}</b></option>`
+                                };
+                                e+='</select>'
+                                e+=`<input type="submit" onclick="addbatch()" style="margin:10px;" value="Add Batch">`;
+                                document.getElementById('modal-content-container').innerHTML+=e;
+                                
+                            }
+                            else{
+                                e="No Batch Available";
+                                document.getElementById('modal-content-container').innerHTML+=e;
+                                // axios.put(`http://localhost:3000/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/product/?prodid=${prodid}&leadid=${LeadId}`,{Status:true}).then(async response=>{
+                                // }).catch(err=>{})
+                                // axios.post(`http://localhost:3000/alumni/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}`,data).then(res=>{
+                                //     if(res.data.message)
+                                //         {
+                                //             alert("Client has Enrolled");
+                                //         }
+                                //         else
+                                //         {
+                                //             alert("Client has not Enrolled");
+                                //         }
+                                // }).catch(err=>{})
+                                
+                            }
+                        }
+                        else{
+                            e="Sorry Right Now, No Batch Available";
+                                document.getElementById('modal-content-container').innerHTML+=e;
+                        }
+                    })
+            }
+            function Closeproduct(prodid){
+                ProdID=prodid
+                var data={
+                    ClientID:ClientID,
+                    LeadID:LeadId,
+                    ProdID:prodid
+                }
+                
+                addBatch(prodid,data);
+                    
+                
+                // }
+                // axios.put(`https://crm-web-api.herokuapp.com/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/product/?prodid=${prodid}&leadid=${LeadId}`,{Status:true}).then(async response=>{
+                // }).catch(err=>{})
+                // axios.post(`https://crm-web-api.herokuapp.com/alumni/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}`,data).then(res=>{
+                // }).catch(err=>{})
+                // location.reload();
+            }
+            
+            function removeproduct(prodid){
+                axios.delete(`http://localhost:3000/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}?ProdID=${prodid}&LeadID=${LeadId}`).then(res=>{
+                    alert("product Deleted")
+                    location.reload();
+                })
+            }
+
+            function buildproductlist(product){
+                console.log(product)
+                var area=document.getElementById('Productlist');
+                area.innerHTML=" "
+                var thead="";
+                var tbody="";
+                if(product.length>0)
+                {
+                    $('#emptycontainer').css("display","none");
+                    thead=`
+                        <table id="producttable">
+                        <tr class="producttabledata" style="border: 1px solid black;">
+                            <th class="producttabledata" style="border: 1px solid black;">Product Name</th>
+                            <th class="producttabledata" style="border: 1px solid black;"> Remove</th>
+                        </tr>`
+                    for(var i in product ){
+                        tbody+=`<tr class="producttabledata" style="border: 1px solid black;">
+                                <td class="producttabledata" style="border: 1px solid black;">${product[i].ProdName}</td>
+                                <td class="producttabledata" style="border: 1px solid black;"><button onclick='removeproduct(${product[i].productid})'>Remove</td>
+                                <td class="producttabledata" style="border: 1px solid black;"><button onclick='Closeproduct(${product[i].productid})'>Close</td>
+                            </tr>`
+                    }
+                    area.innerHTML+=thead+tbody+"</table>"
+                    $('#loader').css("display","none");
+                    $('#Productlist').css("display","block");
+                    
+                }
+                else{
+                    $('#loader').css("display","none");
+                    $('#emptycontainer').css("display","block");
+                }
+            }
+          
+            function getConfirmProduct(){
+                axios.get(`http://localhost:3000/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/status/?leadid=${LeadId}&status=true`).then(async response=>{
+                    var data=response.data.data
+                    console.log("Confirm product =>",data)
+                    if(response.data.message){
+                        var productid;
+                        for(var i in data)
+                        {
+                            productid=data[i].ProdID
+                            var productName;
+                            await axios.get(`http://localhost:3000/product/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${productid}`).then(response=>{
+                                    for(var j in response.data.data){
+                                        productName=response.data.data[j].ProdName;
+                                    }
+                            })
+                            confirmProduct.push({ProdName:productName})
+                        }
+                        var conproduct=document.getElementById('Clientproduct');
+                        conproduct.innerHTML=" ";
+                        var head=`<h2>Client Product</h2>
+                                <hr>`
+                        var body=`<ul>`
+                        for(let k in confirmProduct)
+                        {
+                            var e=`
+                            <li>${confirmProduct[k].ProdName}</li>
+                            `
+                            body+=e
+                        }
+                        body+="</ul>"
+                        conproduct.innerHTML+=head+body;
+                        $('#loader2').css("display","none");
+                        $(conproduct).css("display","block");
+                        
+                    }
+                }).catch(err=>{
+                    console.log(err);
+                })   
+            }
+             
+
+            function getProduct(){
+                axios.get(`http://localhost:3000/interest/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/status/?leadid=${LeadId}&status=false`).then(async response=>{
+                var data=response.data.data;
+                if(response.data.message){
+                    var productid;
+                    var Intereststatus;
+                    var InterestedInStatusDate;
+                    for(var i in data)
+                    {
+                        productid=data[i].ProdID
+                        Intereststatus=data[i].InterestedInStatus;
+                        InterestedInStatusDate=data[i].InterestedInStatusDate
+                        var productName;
+                        await axios.get(`http://localhost:3000/product/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${productid}`).then(response=>{
+                            for(var j in response.data.data){
+                                    productName=response.data.data[j].ProdName;
+                            }
+                        })
+                        product.push({productid:productid,ProdName:productName,Intereststatus:Intereststatus,InterestedInStatusDate:InterestedInStatusDate})
+                    }
+                    buildproductlist(product)
+                }
+                else{
+                    product=[];
+                    buildproductlist(product)
+                }
+            }).catch(err=>{
+                console.log(err);
+            })
+                
+       
+            }
+           
+            getProduct()
+            getallproduct();
+            getallfollowup();
+            getConfirmProduct();    
+        </script>
+    </body>
+</html>
