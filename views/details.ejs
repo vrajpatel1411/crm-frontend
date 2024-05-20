@@ -491,12 +491,19 @@
                     let e;
                     var today = new Date();
                     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-                    axios.get(`https://blissful-dream-production.up.railway.app/batch/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${ProdID}`).then(response=>{
+                    axios.get(`https://web-production-ea1bc.up.railway.app/batch/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${ProdID}`).then(response=>{
                         let batch=response.data.data;
                         console.log(batch)
                         if(response.data.status){
                             let cavailablebatch=batch.filter(a=>{
-                                var tempdate=new Date(a.FromDate);
+                                temp=a.FromDate.substring(0,10)
+                            console.log(temp)
+                            const [month,day,year] = temp.split("-");
+                            const utcDate = Date.UTC(year,month-1,day);
+                            console.log(new Date(utcDate));
+                            var tempdate=new Date(utcDate);
+                            console.log(tempdate)
+                            console.log(today)
                                 if(tempdate>=today)
                                 {
                                     return a;
@@ -511,7 +518,7 @@
                                 e=`<label for="Batch">Select Batch:</label>
                                        <select name="BatchID" id="Batch">`
                                 for(let i in cavailablebatch){
-                                        e+=`<option value=${cavailablebatch[i].BatchID}><b>${cavailablebatch[i].FromDate}</b> - <b>${cavailablebatch[i].ToDate}</b></option>`
+                                        e+=`<option value=${cavailablebatch[i].BatchID}><b>${cavailablebatch[i].FromDate.substring(0,10)}</b> - <b>${cavailablebatch[i].ToDate.substring(0,10)}</b></option>`
                                 };
                                 e+='</select>'
                                 e+=`<input type="submit" onclick="addbatch()" style="margin:10px;" value="Add Batch">`;

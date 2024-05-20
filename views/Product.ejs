@@ -231,7 +231,7 @@
             }
             
             function Deletebatch(id){
-                axios.delete(`https://blissful-dream-production.up.railway.app/batch/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${id}`).then(res=>{
+                axios.delete(`https://web-production-ea1bc.up.railway.app/batch/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${id}`).then(res=>{
                     if(res.data.message)
                     {
                         alert("Batch Deleted")
@@ -255,7 +255,7 @@
                 <ul>   `;
                 for( let i in availablebatch)
                 {
-                    e+=`<div class="Listitems"><li>${availablebatch[i].FromDate} - ${availablebatch[i].ToDate}</li> <input type="button" id="Deletebatch" onclick="Deletebatch(${availablebatch[i].BatchID})" value="Delete Batch"></div><br>`
+                    e+=`<div class="Listitems"><li>${availablebatch[i].FromDate.substring(0,10)} - ${availablebatch[i].ToDate.substring(0,10)}</li> <input type="button" id="Deletebatch" onclick="Deletebatch(${availablebatch[i].BatchID})" value="Delete Batch"></div><br>`
                 }
                 e+=`</ul>`
                 document.getElementById('modal-content-container').innerHTML+=e;
@@ -273,11 +273,19 @@
                 }
                 var today = new Date();
                 var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-                axios.get(`https://blissful-dream-production.up.railway.app/batch/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${id}`).then(response=>{
+                axios.get(`https://web-production-ea1bc.up.railway.app/batch/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${id}`).then(response=>{
                     let batch=response.data.data;
+                    console.log(batch)
                     if(response.data.status){
                         let cavailablebatch=batch.filter(a=>{
-                            var tempdate=new Date(a.FromDate);
+                            temp=a.FromDate.substring(0,10)
+                            console.log(temp)
+                            const [month,day,year] = temp.split("-");
+                            const utcDate = Date.UTC(year,month-1,day);
+                            console.log(new Date(utcDate));
+                            var tempdate=new Date(utcDate);
+                            console.log(tempdate)
+                            console.log(today)
                             if(tempdate>=today)
                             {
                                 return a;
@@ -286,6 +294,7 @@
                                 return;
                             }
                         })
+                        console.log(cavailablebatch)
                         if(cavailablebatch.length>0)
                         {
                             buildBatchContent(cavailablebatch)    
@@ -305,7 +314,7 @@
             }
 
             function deleteProduct(id){    
-                axios.delete(`https://blissful-dream-production.up.railway.app/product/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${id}`).then(res=>{
+                axios.delete(`https://web-production-ea1bc.up.railway.app/product/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${id}`).then(res=>{
                     if(res.data.message)
                     {
                         alert("Product Deleted");
@@ -324,7 +333,7 @@
 
             function getProduct(){
                 let productContainer=document.getElementById('productcontainer');
-                axios.get(`https://blissful-dream-production.up.railway.app/product/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/client/${ClientID}`).then(res=>{
+                axios.get(`https://web-production-ea1bc.up.railway.app/product/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/client/${ClientID}`).then(res=>{
                     Product=res.data.data
                     let e='<table>'
                     for(var i in Product)

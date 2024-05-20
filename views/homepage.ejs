@@ -288,7 +288,7 @@
                     paginationbtn(d1.pages)
                 }
                 function closeLead(id){
-                    axios.put(`https://blissful-dream-production.up.railway.app/lead/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${id}`,{Status:true}).then(response=>{
+                    axios.put(`https://web-production-ea1bc.up.railway.app/lead/${window.localStorage.getItem('token')}/${window.localStorage.getItem('username')}/${id}`,{Status:true}).then(response=>{
                             
                             if(response.data.message){
                                 alert("Lead Close");
