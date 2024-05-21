@@ -1,6 +1,6 @@
 const express = require("express");
 var JSAlert = require("js-alert");
-const { url } = require("./config");
+const { url } = require("./config.js");
 const app = express();
 const ejs = require("ejs");
 const path = require("path");
